@@ -28,6 +28,7 @@ app.get('/', (req: Request, res: Response) => {
     status: 'operational',
     health: '/api/v1/health',
     endpoints: {
+      seed: '/api/v1/seed',
       auth: '/api/v1/auth',
       doctors: '/api/v1/doctors',
       patients: '/api/v1/patients',

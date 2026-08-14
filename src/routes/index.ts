@@ -4,6 +4,7 @@ import doctorRoutes from './doctor.routes';
 import patientRoutes from './patient.routes';
 import dashboardRoutes from './dashboard.routes';
 import { emitNotification } from '../socket';
+import { runSeeding } from '../utils/seeder';
 
 const router = Router();
 
@@ -15,6 +16,27 @@ router.get('/health', (req, res) => {
     message: 'Doctor Tracker API is healthy and operational',
     timestamp: new Date().toISOString(),
   });
+});
+
+// Database Seed API Endpoint (Triggers Seeding for Vercel/Production)
+router.get('/seed', async (req, res, next) => {
+  try {
+    const result = await runSeeding();
+    res.status(200).json({
+      success: true,
+      statusCode: 200,
+      message: 'Database Seeding Completed Successfully!',
+      data: {
+        adminEmail: result.adminEmail,
+        seededDoctorsCount: result.doctorsCount,
+        seededPatientsCount: result.patientsCount,
+        defaultAdminPassword: 'AdminSecretPassword123!',
+      },
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Test Notification Trigger endpoint
