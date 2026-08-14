@@ -90,7 +90,7 @@ export const logoutAdmin = catchAsync(async (req: Request, res: Response) => {
   res.cookie('token', '', {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? 'strict' : 'lax',
+    sameSite: isProduction ? 'none' : 'lax',
     expires: new Date(0), // Instantly expire cookie
   });
 

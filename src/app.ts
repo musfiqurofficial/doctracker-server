@@ -12,7 +12,19 @@ const app: Application = express();
 // Parsers & Security Middleware
 app.use(
   cors({
-    origin: [env.CLIENT_URL, 'http://localhost:3000'],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile/Postman) or matching client URLs & Vercel subdomains
+      if (
+        !origin ||
+        origin === env.CLIENT_URL ||
+        origin.includes('localhost') ||
+        origin.endsWith('.vercel.app')
+      ) {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    },
     credentials: true,
   })
 );
