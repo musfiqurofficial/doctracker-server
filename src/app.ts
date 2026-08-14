@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { env } from './config/env';
+import { connectDB } from './config/database';
 import routes from './routes';
 import { notFound } from './middleware/notFound';
 import { errorHandler } from './middleware/errorHandler';
@@ -18,6 +19,16 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Auto Connect MongoDB on Vercel Serverless & Local Requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Root Welcome & API Discovery Endpoint
 app.get('/', (req: Request, res: Response) => {
