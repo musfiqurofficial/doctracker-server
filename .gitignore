@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# TypeScript Build Output
+dist/
+
+# Environment Secret Files
+.env
+.env.local
+
+# Logs & OS Files
+*.log
+.DS_Store
+Thumbs.db
