@@ -19,11 +19,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Root endpoint
+// Root Welcome & API Discovery Endpoint
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: 'Welcome to Doctor Tracker Backend API Server',
+    version: '1.0.0',
+    status: 'operational',
+    health: '/api/v1/health',
+    endpoints: {
+      auth: '/api/v1/auth',
+      doctors: '/api/v1/doctors',
+      patients: '/api/v1/patients',
+      dashboard: '/api/v1/dashboard/stats',
+    },
+    timestamp: new Date().toISOString(),
   });
 });
 
