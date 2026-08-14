@@ -9,11 +9,9 @@ import { errorHandler } from './middleware/errorHandler';
 
 const app: Application = express();
 
-// Parsers & Security Middleware
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile/Postman) or matching client URLs & Vercel subdomains
       if (
         !origin ||
         origin === env.CLIENT_URL ||
@@ -28,11 +26,11 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Auto Connect MongoDB on Vercel Serverless & Local Requests
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -42,7 +40,6 @@ app.use(async (req, res, next) => {
   }
 });
 
-// Root Welcome & API Discovery Endpoint
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
@@ -61,14 +58,10 @@ app.get('/', (req: Request, res: Response) => {
   });
 });
 
-// API Routes
 app.use('/api', routes);
 app.use('/api/v1', routes);
 
-// 404 Not Found Handler
 app.use(notFound);
-
-// Central Global Error Handler
 app.use(errorHandler);
 
 export default app;
